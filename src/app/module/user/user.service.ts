@@ -9,9 +9,9 @@ import { envVar } from "../../config/env";
 const createUser = async (payload: Partial<Iuser>) => {
   const { email, password, ...rest } = payload;
   const isUserExist = await User.findOne({ email });
-  if (isUserExist) {
-    throw new AppError(httpStatus.BAD_REQUEST, "User already Exist");
-  }
+  // if (isUserExist) {
+  //   throw new AppError(httpStatus.BAD_REQUEST, "User already Exist");
+  // }
   const authProvider: IauthProvider = {
     provider: "Credentials",
     providerId: email as string,
@@ -32,7 +32,7 @@ const updateUser = async (
   payload: Partial<Iuser>,
   decodedToken: JwtPayload
 ) => {
-
+console.log(userId,payload,decodedToken)
   const ifUserExist = await User.findById(userId)
   if(!ifUserExist){
       throw new AppError(httpStatus.NOT_FOUND, "User Not Found");
