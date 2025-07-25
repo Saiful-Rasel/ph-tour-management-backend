@@ -8,12 +8,13 @@ import cookieParser from "cookie-parser"
 import passport from 'passport'
 import expressSession from 'express-session'
 import "./app/config/passport"
+import { envVar } from "./app/config/env";
 
 
 const app = express();
 
 app.use(expressSession({
-    secret:"your secret",
+    secret:envVar.EXPRESS_SESSION_SECRET as string,
     resave:false,
     saveUninitialized:false
 }))

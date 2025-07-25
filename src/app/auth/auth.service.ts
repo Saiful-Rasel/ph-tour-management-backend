@@ -8,35 +8,35 @@ import { Iuser } from "../module/user/user.interface";
 import { JwtPayload } from "jsonwebtoken";
 import { envVar } from "../config/env";
 
-const credentialsLogin = async (payload: Partial<Iuser>) => {
-  const { email, password } = payload;
-  const isUserExist = await User.findOne({ email });
-  if (!isUserExist) {
-    throw new AppError(httpStatus.BAD_REQUEST, "Email Doesnot Exist");
-  }
-  const isUserPasswordMatch = await bcrypt.compare(
-    password as string,
-    isUserExist.password as string
-  );
+// const credentialsLogin = async (payload: Partial<Iuser>) => {
+//   const { email, password } = payload;
+//   const isUserExist = await User.findOne({ email });
+//   if (!isUserExist) {
+//     throw new AppError(httpStatus.BAD_REQUEST, "Email Doesnot Exist");
+//   }
+//   const isUserPasswordMatch = await bcrypt.compare(
+//     password as string,
+//     isUserExist.password as string
+//   );
 
-  if (!isUserPasswordMatch) {
-    throw new AppError(httpStatus.BAD_REQUEST, "password doesnot match");
-  }
-  // const jwtPayload = {
-  //   userId: isUserExist._id,
-  //   email: isUserExist.email,
-  //   role: isUserExist.role
-  // };
-  // const accessToken = generateToken(jwtPayload,envVar.JWT_SECRET as string,envVar.JWT_EXPIREDIN as string)
-  // const refreshToken = generateToken(jwtPayload,envVar.JWT_REFRESH_SECRET,envVar.JWT_REFRESH_EXPIRES)
-  const usersToken = createUserTokens(isUserExist);
-  const { password: pass, ...rest } = isUserExist.toObject();
-  return {
-    accessToken: usersToken.accessToken,
-    refreshToken: usersToken.refreshToken,
-    user: rest,
-  };
-};
+//   if (!isUserPasswordMatch) {
+//     throw new AppError(httpStatus.BAD_REQUEST, "password doesnot match");
+//   }
+//   // const jwtPayload = {
+//   //   userId: isUserExist._id,
+//   //   email: isUserExist.email,
+//   //   role: isUserExist.role
+//   // };
+//   // const accessToken = generateToken(jwtPayload,envVar.JWT_SECRET as string,envVar.JWT_EXPIREDIN as string)
+//   // const refreshToken = generateToken(jwtPayload,envVar.JWT_REFRESH_SECRET,envVar.JWT_REFRESH_EXPIRES)
+//   const usersToken = createUserTokens(isUserExist);
+//   const { password: pass, ...rest } = isUserExist.toObject();
+//   return {
+//     accessToken: usersToken.accessToken,
+//     refreshToken: usersToken.refreshToken,
+//     user: rest,
+//   };
+// };
 
 const getNewAccessToken = async (refreshToken: string) => {
   const newAccessToken = await createNewAccessTokenWithRefreshToken(refreshToken)
@@ -61,7 +61,6 @@ const resetPassword = async(oldPassword:string,newPassword:string,decodedToken :
 }
 
 export const AuthServices = {
-  credentialsLogin,
   getNewAccessToken,
   resetPassword
 };
