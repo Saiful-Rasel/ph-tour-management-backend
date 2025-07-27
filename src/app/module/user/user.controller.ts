@@ -55,9 +55,22 @@ const getAllUser = catchAsync(async(req: Request, res: Response, next: NextFunct
     statusCode:httpStatus.OK,
     message:"all data retrived successfully",
     data:getAllUser.data,
-    meta:getAllUser.meta
+    // meta:getAllUser.meta 
   })
 })
+
+const getMe = catchAsync(async(req: Request, res: Response, next: NextFunction)=>{
+  const decodedToken = req.user as JwtPayload
+  const getAllUser = await userServices.getMe(decodedToken.userId)
+  sendResponse(res,{
+    success:true,
+    statusCode:httpStatus.OK,
+    message:"get me route successfully",
+    data:getAllUser.data,
+   
+  })
+})
+
 
 const updateUser = catchAsync(async(req: Request, res: Response, next: NextFunction)=>{
  const userId = req.params.id
@@ -78,7 +91,8 @@ const verifiedToken = req.user
 export const userControllers = {
   createUser,
   getAllUser,
-  updateUser
+  updateUser,
+  getMe
 };
 
 
