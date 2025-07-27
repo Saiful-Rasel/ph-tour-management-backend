@@ -31,4 +31,16 @@ export const envVar = {
     SSL_FAIL_FRONTEND_URL: process.env.SSL_FAIL_FRONTEND_URL as string,
     SSL_CANCEL_FRONTEND_URL: process.env.SSL_CANCEL_FRONTEND_URL as string,
   },
+  cloudinary: {
+    CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME as string,
+    CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY as string,
+    CLUDINARY_SECRET_KEY: process.env.CLUDINARY_SECRET_KEY as string,
+  },
+  EMAIL_SENDER: {
+    SMTP_HOST: process.env.SMTP_HOST,
+    SMTP_USER: process.env.SMTP_USER,
+    SMTP_FROM: process.env.SMTP_FROM,
+    SMTP_PORT: process.env.SMTP_PORT,
+    SMTP_PASS: process.env.SMTP_PASS,
+  },
 };

@@ -4,18 +4,22 @@ import { checkAuth } from "../middleware/checkAuth"
 import { object } from "zod"
 import { Role } from "../module/user/user.interface"
 import passport from "passport"
+import { envVar } from "../config/env"
 
 
 const router = Router()
 router.post('/login',AuthControllers.credentialsLogin)
 router.post('/refresh-token',AuthControllers.getNewAccessToken)
 router.post('/logout',AuthControllers.logout)
+router.post('/change-password',checkAuth(...Object.values(Role)),AuthControllers.changePassword)
 router.post('/reset-password',checkAuth(...Object.values(Role)),AuthControllers.resetPassword)
+router.post('/set-password',checkAuth(...Object.values(Role)),AuthControllers.setPassword)
+router.post('/forgot-password',AuthControllers.forgotPassword)
 router.get('/google', async(req:Request,res:Response,next:NextFunction)=>{
     const rediret= req.query.redirect || "/"
     passport.authenticate("google",{scope:["profile" , "email"],state:rediret  as string})(req,res,next)
 })
 
-router.get('/google/callback',passport.authenticate("google",{failureRedirect:"/login"}),AuthControllers.googleCallback)
+router.get('/google/callback',passport.authenticate("google",{failureRedirect:`${envVar.FRONTEND_URL}/login?error=there is some issue with your account,please contact our support team`}),AuthControllers.googleCallback)
 
 export const AuthRoutes = router

@@ -5,8 +5,10 @@ import { handleDuplicateError } from "../helper/handleDuplicateError";
 import { handleCastError } from "../helper/handleCastERror";
 import { handleValidationError } from "../helper/HandleValidationEror";
 import { hanldeZodError } from "../helper/HandleZodError";
+import { deleteImageFromCloudinary } from "../config/cloudinary.config";
+import multer from "multer";
 
-export const globalErrorHandler = (
+export const globalErrorHandler = async(
   error: any,
   req: Request,
   res: Response,
@@ -14,6 +16,13 @@ export const globalErrorHandler = (
 ) => {
   if(envVar.node_env === 'development'){
     console.log(error)
+  }
+  if(req.file){
+    await deleteImageFromCloudinary(req.file.path)
+  }
+   if(req.files && Array.isArray(req.files) && req.files.length ){
+   const imageUrls = (req.files as Express.Multer.File[]).map(file=> file.path)
+   await Promise.all(imageUrls.map(url => deleteImageFromCloudinary(url)))
   }
   let errorSources: any = [];
   let statusCode = 500;

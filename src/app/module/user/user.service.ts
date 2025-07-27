@@ -32,12 +32,12 @@ const updateUser = async (
   payload: Partial<Iuser>,
   decodedToken: JwtPayload
 ) => {
-console.log(userId,payload,decodedToken)
-  const ifUserExist = await User.findById(userId)
-  if(!ifUserExist){
-      throw new AppError(httpStatus.NOT_FOUND, "User Not Found");
+  console.log(userId, payload, decodedToken);
+  const ifUserExist = await User.findById(userId);
+  if (!ifUserExist) {
+    throw new AppError(httpStatus.NOT_FOUND, "User Not Found");
   }
-  
+
   if (payload.role) {
     if (decodedToken.role === Role.USER || decodedToken.role === Role.GUIDE) {
       throw new AppError(httpStatus.FORBIDDEN, "you are not authorized");
@@ -64,7 +64,7 @@ console.log(userId,payload,decodedToken)
     new: true,
     runValidators: true,
   });
-  return newUpdatedUser
+  return newUpdatedUser;
 };
 
 const getAllUser = async () => {
@@ -78,8 +78,17 @@ const getAllUser = async () => {
   };
 };
 
+const getMe = async (userId: string) => {
+  const user = await User.findById(userId).select("-password");
+
+  return {
+    data: user
+  };
+};
+
 export const userServices = {
   createUser,
   getAllUser,
-  updateUser
+  updateUser,
+  getMe,
 };
